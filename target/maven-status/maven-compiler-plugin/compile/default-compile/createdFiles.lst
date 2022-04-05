@@ -1,0 +1,7 @@
+lwq\jdbc\annotation\Id.class
+lwq\jdbc\main\JDBCUtil.class
+lwq\jdbc\annotation\Column.class
+lwq\jdbc\annotation\Table.class
+lwq\jdbc\utils\NumberUtils.class
+lwq\jdbc\main\JDBC.class
+lwq\jdbc\utils\ArrayUtils.class
