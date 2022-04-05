@@ -20,7 +20,7 @@ datasource:
 import lwq.jdbc.annotation.Id;
 import lwq.jdbc.annotation.Table;
 
-@Lombok
+@Data
 //与该实体映射的表格名称
 @Table("users")
 public class User {
@@ -36,19 +36,23 @@ public class User {
 
 ### 4.代码调用
 ```java
-import lwq.jdbc.main.JDBCUtil;
+import lwq.jdbc.mysql.JDBCUtil;
 
 public class Main {
     public static void main(String[] args) {
         //以配置文件的路径为构造参数
         JDBCUtil jdbcUtil = new JDBCUtil("src/config.yml");
+        
+        //通过配置的实体类查询
         User user = new User();
         user.setId(1);
         user = jdbcUtil.query(user);
         System.out.println(user);
 
-        List users = jdbcUtil.queryList("select * from users",User.class);
-        System.out.println(users);
+        //分页查询
+        jdbcUtil.setPage(2,10);
+        Page page = jdbcUtil.getPage(user);
+        System.out.println(page);
 
     }
 }

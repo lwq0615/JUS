@@ -1,4 +1,4 @@
-package lwq.jdbc.main;
+package lwq.jdbc.mysql;
 
 import lwq.jdbc.utils.ArrayUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -17,6 +17,8 @@ public class JDBC {
     private String url;
     private String username;
     private String password;
+
+    private Page page;
 
 
     public JDBC(String path) {
@@ -51,6 +53,42 @@ public class JDBC {
             e.printStackTrace();
         } finally {
             return conn;
+        }
+    }
+
+    /**
+     * 设置分页信息，设置后getPage方法将自动分页
+     * @param current 当前页
+     * @param size 每页条数
+     */
+    public void setPage(Integer current, Integer size){
+        this.page = new Page(current,size);
+    }
+
+    /**
+     * 分页查询
+     * @param sql 查询语句
+     * @param rClass 返回数据类型
+     * @return Page分页数据
+     */
+    protected Page getPage(String sql, Class rClass){
+        String countSql = sql.substring(0,sql.indexOf("select")+6)+" count(*) count "+sql.substring(sql.indexOf("from"));
+        try{
+            Connection conn = this.getConnection();
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery(countSql);
+            result.next();
+            this.page.setTotal(result.getInt("count"));
+            Integer current = this.page.getCurrent();
+            Integer size = this.page.getSize();
+            if(current != null && size != null){
+                sql += " limit "+(current-1)*size+","+size;
+            }
+            this.page.setData(this.queryList(sql,rClass));
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return this.page;
         }
     }
 

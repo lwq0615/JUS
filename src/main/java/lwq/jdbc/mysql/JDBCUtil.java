@@ -1,4 +1,4 @@
-package lwq.jdbc.main;
+package lwq.jdbc.mysql;
 
 import lwq.jdbc.annotation.Column;
 import lwq.jdbc.annotation.Id;
@@ -19,6 +19,17 @@ public class JDBCUtil extends JDBC {
         super(path);
     }
 
+
+    /**
+     * 分页查询
+     * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
+     * @return Page分页数据
+     */
+    public Page getPage(Object obj){
+        String sql = this.getSelectSql(obj);
+        Class cls = obj.getClass();
+        return this.getPage(sql,cls);
+    }
 
     /**
      * 查询数据库中的一条记录4
