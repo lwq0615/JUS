@@ -12,7 +12,8 @@ datasource:
   url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
   username: root
   password: 123456
-
+  #最大连接数
+  maxCount: 100
 ```
 
 ### 3.创建实体类

@@ -7,10 +7,14 @@ import lwq.jdbc.utils.ArrayUtils;
 import lwq.jdbc.utils.NumberUtils;
 
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCUtil extends JDBC {
+
 
     private final String NO_TABLE_MESSAGE = "Before using entity as parameters, " +
             "you need to configure @Table(tableName) annotation of the entity.";
@@ -21,22 +25,11 @@ public class JDBCUtil extends JDBC {
 
 
     /**
-     * 分页查询
-     * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
-     * @return Page分页数据
-     */
-    public Page getPage(Object obj){
-        String sql = this.getSelectSql(obj);
-        Class cls = obj.getClass();
-        return this.getPage(sql,cls);
-    }
-
-    /**
      * 查询数据库中的一条记录4
      * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
      * @return 返回查询结果，查询不到返回null
      */
-    public <R> R query(Object obj){
+    public <R extends Object> R query(R obj){
         String sql = this.getSelectSql(obj);
         Class cls = obj.getClass();
         return (R)this.query(sql, cls);
@@ -47,10 +40,58 @@ public class JDBCUtil extends JDBC {
      * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
      * @return 返回查询结果，查询不到返回null
      */
-    public List queryList(Object obj){
+    public <E extends Object> List<E> queryList(E obj){
         String sql = this.getSelectSql(obj);
         Class cls = obj.getClass();
         return this.queryList(sql,cls);
+    }
+
+    /**
+     * 分页查询
+     * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
+     * @param current 当前页码
+     * @param size 每页条数
+     * @param <E> 返回数据类型
+     * @return Page分页数据
+     */
+    public <E extends Object> Page<E> getPage(E obj, int current, int size){
+        Page<E> page = null;
+        Connection conn = null;
+        Statement statement = null;
+        if(current < 1){
+            current = 1;
+        }
+        if(size < 0){
+            size = 0;
+        }
+        try{
+            String sql = getSelectSql(obj);
+            conn = this.getConnection();
+            statement = conn.createStatement();
+            int selectStart = sql.toLowerCase().indexOf("select");
+            int fromStart = sql.toLowerCase().indexOf("from");
+            String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
+            ResultSet result = statement.executeQuery(countSql);
+            result.next();
+            page = new Page(current,size,result.getInt("count"));
+            sql += " limit "+(current-1)*size+","+size;
+            result = statement.executeQuery(sql);
+            while(result.next()) {
+                E row = (E)obj.getClass().newInstance();
+                this.setFieldValue(row, result);
+                page.add(row);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+                this.free(conn);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return page;
+        }
     }
 
     /**

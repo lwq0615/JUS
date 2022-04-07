@@ -18,7 +18,7 @@ public class JDBC {
     private String username;
     private String password;
 
-    private Page page;
+    public List<Connection> cons;
 
 
     public JDBC(String path) {
@@ -32,63 +32,52 @@ public class JDBC {
         }
     }
 
-    private void config(Map config){
-        Map datasource = (Map)config.get("datasource");
+    private void config(Map config) {
+        Map datasource = (Map) config.get("datasource");
         String driver = (String) datasource.get("driver");
         try {
             Class.forName(driver);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        this.url = String.valueOf(datasource.get("url"));
-        this.username = String.valueOf(datasource.get("username"));
-        this.password = String.valueOf(datasource.get("password"));
-    }
-
-    private Connection getConnection(){
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url, username, password);
+            this.url = String.valueOf(datasource.get("url"));
+            this.username = String.valueOf(datasource.get("username"));
+            this.password = String.valueOf(datasource.get("password"));
+            if(datasource.get("maxCount") != null){
+                this.loadConnection((Integer) datasource.get("maxCount"));
+            }else{
+                this.loadConnection(100);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            return conn;
         }
     }
 
-    /**
-     * 设置分页信息，设置后getPage方法将自动分页
-     * @param current 当前页
-     * @param size 每页条数
-     */
-    public void setPage(Integer current, Integer size){
-        this.page = new Page(current,size);
+    private void loadConnection(int count){
+        this.cons = new ArrayList<Connection>();
+        for (int i = 0; i < count; i++) {
+            try {
+                cons.add(DriverManager.getConnection(url, username, password));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    /**
-     * 分页查询
-     * @param sql 查询语句
-     * @param rClass 返回数据类型
-     * @return Page分页数据
-     */
-    protected Page getPage(String sql, Class rClass){
-        String countSql = sql.substring(0,sql.indexOf("select")+6)+" count(*) count "+sql.substring(sql.indexOf("from"));
-        try{
-            Connection conn = this.getConnection();
-            Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery(countSql);
-            result.next();
-            this.page.setTotal(result.getInt("count"));
-            Integer current = this.page.getCurrent();
-            Integer size = this.page.getSize();
-            if(current != null && size != null){
-                sql += " limit "+(current-1)*size+","+size;
+    protected Connection getConnection(){
+        synchronized (cons){
+            if(cons.size() < 1){
+                try {
+                    cons.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            this.page.setData(this.queryList(sql,rClass));
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            return this.page;
+            return cons.remove(cons.size()-1);
+        }
+    }
+
+    protected void free(Connection conn){
+        synchronized (cons){
+            cons.add(conn);
+            cons.notify();
         }
     }
 
@@ -115,7 +104,7 @@ public class JDBC {
         }finally {
             try {
                 statement.close();
-                conn.close();
+                this.free(conn);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -129,8 +118,8 @@ public class JDBC {
      * @param rClass 映射类型
      * @return 查询结果
      */
-    public List queryList(String sql, Class rClass){
-        List res = null;
+    public <E> List<E> queryList(String sql, Class<E> rClass){
+        List<E> res = null;
         Connection conn = null;
         Statement statement = null;
         try {
@@ -138,11 +127,11 @@ public class JDBC {
             statement = conn.createStatement();
             ResultSet result = statement.executeQuery(sql);
             while(result.next()) {
-                Object obj = rClass.newInstance();
-                this.setFieldValue(obj, result);
                 if(res == null){
-                    res = new ArrayList();
+                    res = new ArrayList<>();
                 }
+                E obj = rClass.newInstance();
+                this.setFieldValue(obj, result);
                 res.add(obj);
             }
         }catch (Exception e){
@@ -150,7 +139,7 @@ public class JDBC {
         }finally {
             try {
                 statement.close();
-                conn.close();
+                this.free(conn);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -177,7 +166,7 @@ public class JDBC {
         }finally {
             try {
                 statement.close();
-                conn.close();
+                this.free(conn);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -207,7 +196,7 @@ public class JDBC {
         }finally {
             try {
                 statement.close();
-                conn.close();
+                this.free(conn);
             }catch (Exception e){
                 e.printStackTrace();
             }

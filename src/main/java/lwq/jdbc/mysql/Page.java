@@ -1,17 +1,17 @@
 package lwq.jdbc.mysql;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class Page {
+public class Page<E> extends ArrayList<E> {
 
     private Integer current;
     private Integer size;
     private Integer total;
-    private List data;
 
-    public Page(Integer current, Integer size) {
+    public Page(Integer current, Integer size, Integer total) {
         this.current = current;
         this.size = size;
+        this.total = total;
     }
 
     public Integer getCurrent() {
@@ -26,25 +26,13 @@ public class Page {
         return total;
     }
 
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
-
-    public List getData() {
-        return data;
-    }
-
-    public void setData(List data) {
-        this.data = data;
-    }
-
     @Override
     public String toString() {
         return "Page{" +
                 "current=" + current +
                 ", size=" + size +
                 ", total=" + total +
-                ", data=" + data +
+                ", data=" + super.toString() +
                 '}';
     }
 }

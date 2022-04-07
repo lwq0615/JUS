@@ -1,7 +1,10 @@
+lwq\jdbc\User.class
 lwq\jdbc\annotation\Id.class
-lwq\jdbc\main\JDBCUtil.class
 lwq\jdbc\annotation\Column.class
 lwq\jdbc\annotation\Table.class
+lwq\jdbc\mysql\Page.class
+lwq\jdbc\mysql\JDBC.class
+lwq\jdbc\mysql\JDBCUtil.class
 lwq\jdbc\utils\NumberUtils.class
-lwq\jdbc\main\JDBC.class
+lwq\jdbc\Main.class
 lwq\jdbc\utils\ArrayUtils.class
