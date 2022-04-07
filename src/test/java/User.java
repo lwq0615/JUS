@@ -1,4 +1,5 @@
 import lombok.Data;
+import lwq.jdbc.annotation.Column;
 import lwq.jdbc.annotation.Table;
 
 @Table("users")
@@ -6,6 +7,7 @@ import lwq.jdbc.annotation.Table;
 public class User {
 
     private Integer id;
-    private String name;
+    @Column("name")
+    private String nam;
 
 }

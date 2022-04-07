@@ -7,9 +7,6 @@ import lwq.jdbc.utils.ArrayUtils;
 import lwq.jdbc.utils.NumberUtils;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,42 +53,20 @@ public class JDBCUtil extends JDBC {
      */
     public <E extends Object> Page<E> getPage(E obj, int current, int size){
         Page<E> page = null;
-        Connection conn = null;
-        Statement statement = null;
         if(current < 1){
             current = 1;
         }
         if(size < 0){
             size = 0;
         }
-        try{
-            String sql = getSelectSql(obj);
-            conn = this.getConnection();
-            statement = conn.createStatement();
-            int selectStart = sql.toLowerCase().indexOf("select");
-            int fromStart = sql.toLowerCase().indexOf("from");
-            String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
-            ResultSet result = statement.executeQuery(countSql);
-            result.next();
-            page = new Page(current,size,result.getInt("count"));
-            sql += " limit "+(current-1)*size+","+size;
-            result = statement.executeQuery(sql);
-            while(result.next()) {
-                E row = (E)obj.getClass().newInstance();
-                this.setFieldValue(row, result);
-                page.add(row);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            try {
-                statement.close();
-                this.free(conn);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return page;
+        String sql = getSelectSql(obj);
+        page = new Page(current,size,this.queryCount(sql));
+        sql += " limit "+(current-1)*size+","+size;
+        List data = this.queryList(sql,obj.getClass());
+        if(data != null){
+            page.addAll(data);
         }
+        return page;
     }
 
     /**

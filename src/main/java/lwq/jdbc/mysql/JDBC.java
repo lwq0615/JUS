@@ -1,5 +1,6 @@
 package lwq.jdbc.mysql;
 
+import lwq.jdbc.annotation.Column;
 import lwq.jdbc.utils.ArrayUtils;
 import org.yaml.snakeyaml.Yaml;
 
@@ -18,9 +19,15 @@ public class JDBC {
     private String username;
     private String password;
 
+    private boolean debug = false;
+
     public List<Connection> cons;
 
 
+    /**
+     * 在构造函数内进行配置文件读取和连接池的初始化
+     * @param path 配置文件的路径
+     */
     public JDBC(String path) {
         try {
             Yaml yaml = new Yaml();
@@ -32,6 +39,10 @@ public class JDBC {
         }
     }
 
+    /**
+     * 加载相关的配置和连接池
+     * @param config 从配置文件读取的map对象
+     */
     private void config(Map config) {
         Map datasource = (Map) config.get("datasource");
         String driver = (String) datasource.get("driver");
@@ -45,11 +56,18 @@ public class JDBC {
             }else{
                 this.loadConnection(100);
             }
+            if(datasource.get("debug") != null){
+                this.debug = (boolean) datasource.get("debug");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 加载数据库连接池
+     * @param count 连接数
+     */
     private void loadConnection(int count){
         this.cons = new ArrayList<Connection>();
         for (int i = 0; i < count; i++) {
@@ -61,7 +79,11 @@ public class JDBC {
         }
     }
 
-    protected Connection getConnection(){
+    /**
+     * 从连接池内获取一个连接，如果没有闲置的连接，则进入等待
+     * @return Connection连接对象
+     */
+    private Connection getConnection(){
         synchronized (cons){
             if(cons.size() < 1){
                 try {
@@ -70,14 +92,36 @@ public class JDBC {
                     e.printStackTrace();
                 }
             }
-            return cons.remove(cons.size()-1);
+            Connection conn = cons.remove(cons.size()-1);
+            try {
+                if(conn == null || conn.isClosed()){
+                    conn = DriverManager.getConnection(url, username, password);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return conn;
         }
     }
 
-    protected void free(Connection conn){
+    /**
+     * 闲置该连接，使得其他线程可以获取该连接
+     * @param conn Connection连接对象
+     */
+    private void free(Connection conn){
         synchronized (cons){
             cons.add(conn);
             cons.notify();
+        }
+    }
+
+    /**
+     * 打印执行的sql语句
+     * @param sql
+     */
+    private void debugSql(String sql){
+        if(this.debug){
+            System.out.println(sql);
         }
     }
 
@@ -94,6 +138,7 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
+            this.debugSql(sql);
             ResultSet result = statement.executeQuery(sql);
             if(result.next()){
                 res = rClass.newInstance();
@@ -125,6 +170,7 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
+            this.debugSql(sql);
             ResultSet result = statement.executeQuery(sql);
             while(result.next()) {
                 if(res == null){
@@ -159,10 +205,10 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
+            this.debugSql(sql);
             res = statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
         }finally {
             try {
                 statement.close();
@@ -186,13 +232,46 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
+            this.debugSql(sql);
             statement.executeUpdate(sql);
+            this.debugSql("select LAST_INSERT_ID() id");
             ResultSet result = statement.executeQuery("select LAST_INSERT_ID() id");
             result.next();
             res = result.getInt("id");
         } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
+        }finally {
+            try {
+                statement.close();
+                this.free(conn);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return res;
+        }
+    }
+
+    /**
+     * 查询total
+     * @param sql 查询语句
+     * @return total总条数
+     */
+    public int queryCount(String sql){
+        int res = 0;
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            int selectStart = sql.toLowerCase().indexOf("select");
+            int fromStart = sql.toLowerCase().indexOf("from");
+            sql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
+            conn = getConnection();
+            statement = conn.createStatement();
+            this.debugSql(sql);
+            ResultSet result = statement.executeQuery(sql);
+            result.next();
+            res = result.getInt("count");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }finally {
             try {
                 statement.close();
@@ -205,6 +284,11 @@ public class JDBC {
     }
 
 
+    /**
+     * 获取某个类的所有属性（包括父类的属性）
+     * @param cls 类的class对象
+     * @return Field数组
+     */
     protected Field[] getFields(Class cls){
         if(cls == null){
             return null;
@@ -213,6 +297,11 @@ public class JDBC {
         return ArrayUtils.concat(fields,this.getFields(cls.getSuperclass()));
     }
 
+    /**
+     * 根据数据库查询结果为一个类型的实例赋值，作为一行的数据
+     * @param res 类实例
+     * @param result 查询结果
+     */
     protected void setFieldValue(Object res, ResultSet result){
         Field[] fields = getFields(res.getClass());
         for (Field field : fields) {
@@ -229,12 +318,14 @@ public class JDBC {
             try{
                 Method method;
                 Object value;
+                Column column = field.getAnnotation(Column.class);
+                String columnName = column==null ? field.getName() : column.value();
                 if(field.getType() == char.class){
                     method = result.getClass().getDeclaredMethod("getString",String.class);
-                    value = ((String)method.invoke(result, field.getName())).charAt(0);
+                    value = ((String)method.invoke(result, columnName)).charAt(0);
                 }else{
                     method = result.getClass().getDeclaredMethod(methonName,String.class);
-                    value = method.invoke(result, field.getName());
+                    value = method.invoke(result, columnName);
                 }
                 field.set(res,value);
             }catch (Exception e){
