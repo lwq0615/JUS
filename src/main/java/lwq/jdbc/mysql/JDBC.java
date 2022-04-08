@@ -1,7 +1,7 @@
 package lwq.jdbc.mysql;
 
 import lwq.jdbc.annotation.Column;
-import lwq.jdbc.utils.ArrayUtils;
+import lwq.jdbc.utils.ClassUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JDBC {
+public class JDBC implements Execute {
 
     private String url;
     private String username;
@@ -21,7 +21,7 @@ public class JDBC {
 
     private boolean debug = false;
 
-    public List<Connection> cons;
+    private List<Connection> cons;
 
 
     /**
@@ -37,6 +37,10 @@ public class JDBC {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean debug() {
+        return debug;
     }
 
     /**
@@ -116,21 +120,12 @@ public class JDBC {
     }
 
     /**
-     * 打印执行的sql语句
-     * @param sql
-     */
-    private void debugSql(String sql){
-        if(this.debug){
-            System.out.println(sql);
-        }
-    }
-
-    /**
      * 查询一条记录
      * @param sql 查询语句
      * @param rClass 映射类型
      * @return 查询结果
      */
+    @Override
     public <R> R query(String sql, Class<R> rClass){
         R res = null;
         Connection conn = null;
@@ -138,7 +133,6 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
-            this.debugSql(sql);
             ResultSet result = statement.executeQuery(sql);
             if(result.next()){
                 res = rClass.newInstance();
@@ -163,6 +157,7 @@ public class JDBC {
      * @param rClass 映射类型
      * @return 查询结果
      */
+    @Override
     public <E> List<E> queryList(String sql, Class<E> rClass){
         List<E> res = null;
         Connection conn = null;
@@ -170,7 +165,6 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
-            this.debugSql(sql);
             ResultSet result = statement.executeQuery(sql);
             while(result.next()) {
                 if(res == null){
@@ -198,6 +192,7 @@ public class JDBC {
      * @param sql sql语句
      * @return 操作成功的记录条数
      */
+    @Override
     public int execute(String sql){
         int res = 0;
         Connection conn = null;
@@ -205,7 +200,6 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
-            this.debugSql(sql);
             res = statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -225,6 +219,7 @@ public class JDBC {
      * @param sql 插入语句
      * @return 插入成功返回自动递增的id，否则返回null
      */
+    @Override
     public Integer insertReturnId(String sql){
         Integer res = null;
         Connection conn = null;
@@ -232,9 +227,7 @@ public class JDBC {
         try {
             conn = getConnection();
             statement = conn.createStatement();
-            this.debugSql(sql);
             statement.executeUpdate(sql);
-            this.debugSql("select LAST_INSERT_ID() id");
             ResultSet result = statement.executeQuery("select LAST_INSERT_ID() id");
             result.next();
             res = result.getInt("id");
@@ -256,17 +249,14 @@ public class JDBC {
      * @param sql 查询语句
      * @return total总条数
      */
+    @Override
     public int queryCount(String sql){
         int res = 0;
         Connection conn = null;
         Statement statement = null;
         try {
-            int selectStart = sql.toLowerCase().indexOf("select");
-            int fromStart = sql.toLowerCase().indexOf("from");
-            sql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
             conn = getConnection();
             statement = conn.createStatement();
-            this.debugSql(sql);
             ResultSet result = statement.executeQuery(sql);
             result.next();
             res = result.getInt("count");
@@ -284,26 +274,14 @@ public class JDBC {
     }
 
 
-    /**
-     * 获取某个类的所有属性（包括父类的属性）
-     * @param cls 类的class对象
-     * @return Field数组
-     */
-    protected Field[] getFields(Class cls){
-        if(cls == null){
-            return null;
-        }
-        Field[] fields = cls.getDeclaredFields();
-        return ArrayUtils.concat(fields,this.getFields(cls.getSuperclass()));
-    }
 
     /**
      * 根据数据库查询结果为一个类型的实例赋值，作为一行的数据
      * @param res 类实例
      * @param result 查询结果
      */
-    protected void setFieldValue(Object res, ResultSet result){
-        Field[] fields = getFields(res.getClass());
+    private void setFieldValue(Object res, ResultSet result){
+        Field[] fields = ClassUtils.getFields(res.getClass());
         for (Field field : fields) {
             field.setAccessible(true);
             String type;

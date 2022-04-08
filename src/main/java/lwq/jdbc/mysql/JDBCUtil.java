@@ -4,20 +4,51 @@ import lwq.jdbc.annotation.Column;
 import lwq.jdbc.annotation.Id;
 import lwq.jdbc.annotation.Table;
 import lwq.jdbc.utils.ArrayUtils;
+import lwq.jdbc.utils.ClassUtils;
 import lwq.jdbc.utils.NumberUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCUtil extends JDBC {
+public class JDBCUtil implements Execute {
+
+    private Execute jdbc;
 
 
     private final String NO_TABLE_MESSAGE = "Before using entity as parameters, " +
             "you need to configure @Table(tableName) annotation of the entity.";
 
     public JDBCUtil(String path) {
-        super(path);
+        JDBCProxy jdbcProxy = new JDBCProxy(new JDBC(path));
+        this.jdbc = jdbcProxy.getProxy();
+    }
+
+
+
+    @Override
+    public <R> R query(String sql, Class<R> rClass) {
+        return jdbc.query(sql,rClass);
+    }
+
+    @Override
+    public <E> List<E> queryList(String sql, Class<E> rClass) {
+        return jdbc.queryList(sql,rClass);
+    }
+
+    @Override
+    public int execute(String sql) {
+        return jdbc.execute(sql);
+    }
+
+    @Override
+    public Integer insertReturnId(String sql) {
+        return jdbc.insertReturnId(sql);
+    }
+
+    @Override
+    public int queryCount(String sql) {
+        return jdbc.queryCount(sql);
     }
 
 
@@ -60,7 +91,10 @@ public class JDBCUtil extends JDBC {
             size = 0;
         }
         String sql = getSelectSql(obj);
-        page = new Page(current,size,this.queryCount(sql));
+        int selectStart = sql.toLowerCase().indexOf("select");
+        int fromStart = sql.toLowerCase().indexOf("from");
+        String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
+        page = new Page(current,size,this.queryCount(countSql));
         sql += " limit "+(current-1)*size+","+size;
         List data = this.queryList(sql,obj.getClass());
         if(data != null){
@@ -123,7 +157,7 @@ public class JDBCUtil extends JDBC {
                 throw new Exception(NO_TABLE_MESSAGE);
             }
             String tableName = obj.getClass().getAnnotation(Table.class).value();
-            Field[] fields = getFields(obj.getClass());
+            Field[] fields = ClassUtils.getFields(obj.getClass());
             sql = "select * from "+tableName;
             List<String> wheres = new ArrayList<String>();
             for (int i = 0; i < fields.length; i++) {
@@ -163,7 +197,7 @@ public class JDBCUtil extends JDBC {
                 throw new Exception(NO_TABLE_MESSAGE);
             }
             String tableName = obj.getClass().getAnnotation(Table.class).value();
-            Field[] fields = getFields(obj.getClass());
+            Field[] fields = ClassUtils.getFields(obj.getClass());
             List<String> columns = new ArrayList<String>();
             List<String> values = new ArrayList<String>();
             for (Field field : fields) {
@@ -205,7 +239,7 @@ public class JDBCUtil extends JDBC {
                 throw new Exception(NO_TABLE_MESSAGE);
             }
             String tableName = obj.getClass().getAnnotation(Table.class).value();
-            Field[] fields = getFields(obj.getClass());
+            Field[] fields = ClassUtils.getFields(obj.getClass());
             List<String> values = new ArrayList<String>();
             for (Field field : fields) {
                 field.setAccessible(true);
@@ -256,7 +290,7 @@ public class JDBCUtil extends JDBC {
                 throw new Exception("");
             }
             String tableName = obj.getClass().getAnnotation(Table.class).value();
-            Field[] fields = getFields(obj.getClass());
+            Field[] fields = ClassUtils.getFields(obj.getClass());
             sql = "delete from "+tableName;
             List<String> wheres = new ArrayList<String>();
             for (int i = 0; i < fields.length; i++) {
@@ -283,5 +317,4 @@ public class JDBCUtil extends JDBC {
             return sql;
         }
     }
-
 }
