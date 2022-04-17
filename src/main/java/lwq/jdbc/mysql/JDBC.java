@@ -19,7 +19,7 @@ public class JDBC implements Execute {
     private String username;
     private String password;
 
-    private boolean debug = false;
+    private Map config;
 
     private List<Connection> cons;
 
@@ -33,35 +33,36 @@ public class JDBC implements Execute {
             Yaml yaml = new Yaml();
             InputStream in = new FileInputStream(path);
             Map config = yaml.loadAs(in, Map.class);
-            this.config(config);
+            Map jdbc = (Map) config.get("jdbc");
+            this.config = jdbc;
+            this.config(jdbc);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new Error("读取配置文件失败");
         }
     }
 
-    public boolean debug() {
-        return debug;
+    public Map getConfig() {
+        return config;
     }
 
     /**
      * 加载相关的配置和连接池
-     * @param config 从配置文件读取的map对象
+     * @param jdbc 从配置文件读取的map对象
      */
-    private void config(Map config) {
-        Map datasource = (Map) config.get("datasource");
+    private void config(Map jdbc) {
+        Map datasource = (Map) jdbc.get("datasource");
+        Map config = (Map) jdbc.get("config");
         String driver = (String) datasource.get("driver");
         try {
             Class.forName(driver);
             this.url = String.valueOf(datasource.get("url"));
             this.username = String.valueOf(datasource.get("username"));
             this.password = String.valueOf(datasource.get("password"));
-            if(datasource.get("maxCount") != null){
-                this.loadConnection((Integer) datasource.get("maxCount"));
+            if(config.get("maxCount") != null){
+                this.loadConnection((Integer) config.get("maxCount"));
             }else{
                 this.loadConnection(100);
-            }
-            if(datasource.get("debug") != null){
-                this.debug = (boolean) datasource.get("debug");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,12 +246,40 @@ public class JDBC implements Execute {
     }
 
     /**
+     * 分页查询
+     * @param sql 查询sql
+     * @param rClass 映射类型
+     * @param current 当前页
+     * @param size 每页条数
+     * @return Page对象
+     */
+    @Override
+    public <E extends Entity> Page<E> getPage(String sql, Class rClass, int current, int size) {
+        Page<E> page;
+        if(current < 1){
+            current = 1;
+        }
+        if(size < 0){
+            size = 0;
+        }
+        int selectStart = sql.toLowerCase().indexOf("select");
+        int fromStart = sql.toLowerCase().indexOf("from");
+        String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
+        page = new Page(current, size, this.queryCount(countSql));
+        sql += " limit "+(current-1)*size+","+size;
+        List data = this.queryList(sql,rClass);
+        if(data != null){
+            page.addAll(data);
+        }
+        return page;
+    }
+
+    /**
      * 查询total
      * @param sql 查询语句
      * @return total总条数
      */
-    @Override
-    public int queryCount(String sql){
+    private int queryCount(String sql){
         int res = 0;
         Connection conn = null;
         Statement statement = null;

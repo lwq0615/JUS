@@ -1,7 +1,10 @@
-datasource:
-  driver: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
-  username: root
-  password: 123456
-  maxCount: 100
-  debug: true
+jdbc:
+  datasource:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  config:
+    maxCount: 100
+    debug: true
+    aspectHandler: TestHandler
