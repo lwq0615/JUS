@@ -127,7 +127,7 @@ public class JDBC implements Execute {
      * @return 查询结果
      */
     @Override
-    public <R> R query(String sql, Class<R> rClass){
+    public <R> R query(String sql, Class<R> rClass) throws Exception{
         R res = null;
         Connection conn = null;
         Statement statement = null;
@@ -140,7 +140,7 @@ public class JDBC implements Execute {
                 this.setFieldValue(res,result);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }finally {
             try {
                 statement.close();
@@ -148,8 +148,8 @@ public class JDBC implements Execute {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return res;
         }
+        return res;
     }
 
     /**
@@ -159,7 +159,7 @@ public class JDBC implements Execute {
      * @return 查询结果
      */
     @Override
-    public <E> List<E> queryList(String sql, Class<E> rClass){
+    public <E> List<E> queryList(String sql, Class<E> rClass) throws Exception{
         List<E> res = null;
         Connection conn = null;
         Statement statement = null;
@@ -176,7 +176,7 @@ public class JDBC implements Execute {
                 res.add(obj);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw e;
         }finally {
             try {
                 statement.close();
@@ -184,8 +184,8 @@ public class JDBC implements Execute {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return res;
         }
+        return res;
     }
 
     /**
@@ -194,7 +194,7 @@ public class JDBC implements Execute {
      * @return 操作成功的记录条数
      */
     @Override
-    public int execute(String sql){
+    public int execute(String sql) throws Exception{
         int res = 0;
         Connection conn = null;
         Statement statement = null;
@@ -203,7 +203,7 @@ public class JDBC implements Execute {
             statement = conn.createStatement();
             res = statement.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         }finally {
             try {
                 statement.close();
@@ -211,8 +211,8 @@ public class JDBC implements Execute {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return res;
         }
+        return res;
     }
 
     /**
@@ -221,7 +221,7 @@ public class JDBC implements Execute {
      * @return 插入成功返回自动递增的id，否则返回null
      */
     @Override
-    public Integer insertReturnId(String sql){
+    public Integer insertReturnId(String sql) throws Exception{
         Integer res = null;
         Connection conn = null;
         Statement statement = null;
@@ -233,7 +233,7 @@ public class JDBC implements Execute {
             result.next();
             res = result.getInt("id");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         }finally {
             try {
                 statement.close();
@@ -241,8 +241,8 @@ public class JDBC implements Execute {
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return res;
         }
+        return res;
     }
 
     /**
@@ -267,7 +267,12 @@ public class JDBC implements Execute {
         String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
         page = new Page(current, size, this.queryCount(countSql));
         sql += " limit "+(current-1)*size+","+size;
-        List data = this.queryList(sql,rClass);
+        List data = null;
+        try {
+            data = this.queryList(sql,rClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(data != null){
             page.addAll(data);
         }

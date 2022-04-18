@@ -16,27 +16,52 @@ public class JDBCUtil implements Execute {
 
     @Override
     public <R> R query(String sql, Class<R> rClass){
-        return jdbc.query(sql,rClass);
+        try {
+            return jdbc.query(sql,rClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public <E> List<E> queryList(String sql, Class<E> rClass) {
-        return jdbc.queryList(sql,rClass);
+        try {
+            return jdbc.queryList(sql,rClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public int execute(String sql) {
-        return jdbc.execute(sql);
+        try {
+            return jdbc.execute(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public Integer insertReturnId(String sql) {
-        return jdbc.insertReturnId(sql);
+        try {
+            return jdbc.insertReturnId(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public <E extends Entity> Page<E> getPage(String sql, Class rClass, int current, int size) {
-        return jdbc.getPage(sql, rClass, current, size);
+        try {
+            return jdbc.getPage(sql, rClass, current, size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -1,6 +1,7 @@
 package lwq.jdbc.mysql;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
@@ -44,7 +45,15 @@ public class JDBCProxy implements InvocationHandler {
         if(debug){
             System.out.println("JDBCUtils: "+args[0]);
         }
-        Object res = method.invoke(jdbc,args);
+        Object res;
+        try {
+            res = method.invoke(jdbc,args);
+        } catch (Exception e) {
+            if(aspectHandler != null){
+                aspectHandler.error((String) args[0],(InvocationTargetException)e);
+            }
+            throw e;
+        }
         if(aspectHandler != null){
             aspectHandler.after((String) args[0]);
         }

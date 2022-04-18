@@ -11,8 +11,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Entity {
 
+/**
+ * 每个继承自Entity的类可以作为增删改查的参数
+ * 并且具有一些更加方便的功能
+ */
+public class Entity {
 
 
     private final String NO_TABLE_MESSAGE = "Before using entity as parameters, " +

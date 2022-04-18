@@ -2,6 +2,7 @@ import lombok.Data;
 import lwq.jdbc.annotation.Column;
 import lwq.jdbc.annotation.Table;
 import lwq.jdbc.mysql.Entity;
+import lwq.jdbc.mysql.JDBCProxy;
 
 @Table("users")
 @Data
