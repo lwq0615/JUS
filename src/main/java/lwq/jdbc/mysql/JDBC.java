@@ -265,7 +265,6 @@ public class JDBC implements Execute {
         int selectStart = sql.toLowerCase().indexOf("select");
         int fromStart = sql.toLowerCase().indexOf("from");
         String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
-        page = new Page(current, size, this.queryCount(countSql));
         sql += " limit "+(current-1)*size+","+size;
         List data = null;
         try {
@@ -273,6 +272,7 @@ public class JDBC implements Execute {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        page = new Page(current, size, this.queryCount(countSql));
         if(data != null){
             page.addAll(data);
         }
