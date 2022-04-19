@@ -1,7 +1,7 @@
 package lwq.jdbc.mysql;
 
 import lwq.jdbc.annotation.Column;
-import lwq.jdbc.utils.ClassUtils;
+import lwq.utils.ClassUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;

@@ -3,9 +3,9 @@ package lwq.jdbc.mysql;
 import lwq.jdbc.annotation.Column;
 import lwq.jdbc.annotation.Id;
 import lwq.jdbc.annotation.Table;
-import lwq.jdbc.utils.ArrayUtils;
-import lwq.jdbc.utils.ClassUtils;
-import lwq.jdbc.utils.NumberUtils;
+import lwq.utils.ArrayUtils;
+import lwq.utils.ClassUtils;
+import lwq.utils.NumberUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

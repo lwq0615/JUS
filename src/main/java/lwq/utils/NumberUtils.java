@@ -1,4 +1,4 @@
-package lwq.jdbc.utils;
+package lwq.utils;
 
 import java.util.ArrayList;
 import java.util.List;

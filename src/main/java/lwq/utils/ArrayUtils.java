@@ -1,8 +1,7 @@
-package lwq.jdbc.utils;
+package lwq.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ArrayUtils {
