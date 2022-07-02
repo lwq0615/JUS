@@ -27,7 +27,7 @@ public class Entity {
      * 给定一个与表格映射的实体类实例，根据该实例自动生成查询语句
      * @return 查询sql语句
      */
-    public String getSelectSql(){
+    public String selectSql(){
         String sql = null;
         try{
             if(this.getClass().getAnnotation(Table.class) == null){
@@ -66,7 +66,7 @@ public class Entity {
      * 给定一个与表格映射的实体类实例，根据该实例自动生成新增语句
      * @return 新增sql语句
      */
-    public String getInsertSql(){
+    public String insertSql(){
         String sql = null;
         try{
             if(this.getClass().getAnnotation(Table.class) == null){
@@ -106,7 +106,7 @@ public class Entity {
      * 给定一个与表格映射的实体类实例，根据该实例自动生成更新语句
      * @return 更新sql语句
      */
-    public String getUpdateSql(){
+    public String updateSql(){
         String sql = null;
         List<String> wheres = new ArrayList<String>();
         try{
@@ -157,7 +157,7 @@ public class Entity {
      * 给定一个与表格映射的实体类实例，根据该实例自动生成删除语句
      * @return 删除sql语句
      */
-    public String getDeleteSql(){
+    public String deleteSql(){
         String sql = null;
         try{
             if(this.getClass().getAnnotation(Table.class) == null){

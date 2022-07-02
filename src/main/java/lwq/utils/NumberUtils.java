@@ -1,21 +1,13 @@
 package lwq.utils;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NumberUtils {
 
-    private static List<Class> NUMBER_CLASS;
+    private static List<Class> NUMBER_CLASS = Arrays.asList(byte.class,
+            short.class, int.class, long.class, float.class, double.class);
 
-    static {
-        NUMBER_CLASS = new ArrayList<Class>();
-        NUMBER_CLASS.add(byte.class);
-        NUMBER_CLASS.add(short.class);
-        NUMBER_CLASS.add(int.class);
-        NUMBER_CLASS.add(long.class);
-        NUMBER_CLASS.add(float.class);
-        NUMBER_CLASS.add(double.class);
-    }
 
     public static boolean isNumber(Object obj){
         if(obj == null){

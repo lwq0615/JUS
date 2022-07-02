@@ -1,15 +1,19 @@
 package lwq.jdbc.mysql;
 
 import lwq.jdbc.annotation.Column;
+import lwq.jdbc.annotation.Pass;
 import lwq.utils.ClassUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +26,29 @@ public class JDBC implements Execute {
     private Map config;
 
     private List<Connection> cons;
+
+    private static HashMap<Class, String> resultMethods = new HashMap<Class, String>();
+
+    static {
+        resultMethods.put(byte.class, "getByte");
+        resultMethods.put(Byte.class, "getByte");
+        resultMethods.put(short.class, "getShort");
+        resultMethods.put(Short.class, "getShort");
+        resultMethods.put(int.class, "getInt");
+        resultMethods.put(Integer.class, "getInt");
+        resultMethods.put(long.class, "getLong");
+        resultMethods.put(Long.class, "getLong");
+        resultMethods.put(float.class, "getFloat");
+        resultMethods.put(Float.class, "getFloat");
+        resultMethods.put(double.class, "getDouble");
+        resultMethods.put(Double.class, "getDouble");
+        resultMethods.put(boolean.class, "getBoolean");
+        resultMethods.put(Boolean.class, "getBoolean");
+        resultMethods.put(char.class, "getString");
+        resultMethods.put(Character.class, "getString");
+        resultMethods.put(String.class, "getString");
+        resultMethods.put(Date.class, "getDate");
+    }
 
 
     /**
@@ -160,7 +187,7 @@ public class JDBC implements Execute {
      */
     @Override
     public <E> List<E> queryList(String sql, Class<E> rClass) throws Exception{
-        List<E> res = null;
+        List<E> res = new ArrayList<>();
         Connection conn = null;
         Statement statement = null;
         try {
@@ -168,9 +195,6 @@ public class JDBC implements Execute {
             statement = conn.createStatement();
             ResultSet result = statement.executeQuery(sql);
             while(result.next()) {
-                if(res == null){
-                    res = new ArrayList<>();
-                }
                 E obj = rClass.newInstance();
                 this.setFieldValue(obj, result);
                 res.add(obj);
@@ -255,7 +279,6 @@ public class JDBC implements Execute {
      */
     @Override
     public <E extends Entity> Page<E> getPage(String sql, Class rClass, int current, int size) {
-        Page<E> page;
         if(current < 1){
             current = 1;
         }
@@ -265,6 +288,11 @@ public class JDBC implements Execute {
         int selectStart = sql.toLowerCase().indexOf("select");
         int fromStart = sql.toLowerCase().indexOf("from");
         String countSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
+        int count = this.queryCount(countSql);
+        Page<E> page = new Page<E>(current, size, count);
+        if(count == 0){
+            return page;
+        }
         sql += " limit "+(current-1)*size+","+size;
         List data = null;
         try {
@@ -272,7 +300,6 @@ public class JDBC implements Execute {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        page = new Page(current, size, this.queryCount(countSql));
         if(data != null){
             page.addAll(data);
         }
@@ -315,33 +342,26 @@ public class JDBC implements Execute {
      * @param result 查询结果
      */
     private void setFieldValue(Object res, ResultSet result){
-        Field[] fields = ClassUtils.getFields(res.getClass());
+        Field[] fields = ClassUtils.getFieldsToClass(res.getClass(), Entity.class);
         for (Field field : fields) {
-            field.setAccessible(true);
-            String type;
-            if(field.getType() == Integer.class){
-                type = "int";
-            }else{
-                String[] typeStr = field.getType().toString().split("\\.");
-                type = typeStr[typeStr.length-1];
+            if(field.getAnnotation(Pass.class) != null){
+                continue;
             }
-            type = type.substring(0,1).toUpperCase()+type.substring(1);
-            String methonName = "get" + type;
+            field.setAccessible(true);
+            Column column = field.getAnnotation(Column.class);
+            String columnName = column==null ? field.getName() : column.value();
+            String methodName = this.resultMethods.get(field.getType());
             try{
-                Method method;
+                Method method = ResultSet.class.getDeclaredMethod(methodName,String.class);
                 Object value;
-                Column column = field.getAnnotation(Column.class);
-                String columnName = column==null ? field.getName() : column.value();
-                if(field.getType() == char.class){
-                    method = result.getClass().getDeclaredMethod("getString",String.class);
-                    value = ((String)method.invoke(result, columnName)).charAt(0);
+                if(field.getType() == char.class || field.getType() == Character.class){
+                    value = ((String) method.invoke(result, columnName)).charAt(0);
                 }else{
-                    method = result.getClass().getDeclaredMethod(methonName,String.class);
                     value = method.invoke(result, columnName);
                 }
                 field.set(res,value);
             }catch (Exception e){
-                return;
+                e.printStackTrace();
             }
         }
     }

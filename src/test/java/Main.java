@@ -1,10 +1,12 @@
 import lwq.jdbc.mysql.*;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 
-        JDBCUtil jdbcUtil = new JDBCUtil("src/config.yml");
-        Page<User> page = jdbcUtil.getPage(new User(),1,1);
+        JUS jus = new JUS("src/config.yml");
+        List<User> page = jus.queryList(new User());
         System.out.println(page);
 
 

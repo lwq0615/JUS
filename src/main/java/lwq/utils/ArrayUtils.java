@@ -24,8 +24,9 @@ public class ArrayUtils {
 
     public static String join(List<String> arr, String c){
         String res = "";
-        for (int i = 0; i < arr.size(); i++) {
-            res += i==0 ? arr.get(i) : c+arr.get(i);
+        res += arr.get(0);
+        for (int i = 1; i < arr.size(); i++) {
+            res += c+arr.get(i);
         }
         return res;
     }
