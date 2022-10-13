@@ -41,7 +41,7 @@ public class JDBCProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if(aspectHandler != null){
-            aspectHandler.before((String) args[0]);
+            aspectHandler.before(args);
         }
         if(debug){
             System.out.println("JDBCUtils: "+args[0]);
@@ -60,7 +60,7 @@ public class JDBCProxy implements InvocationHandler {
             }
         }
         if(aspectHandler != null){
-            aspectHandler.after((String) args[0]);
+            aspectHandler.after(args);
         }
         return res;
     }

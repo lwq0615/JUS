@@ -2,50 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88fb6f5a-c28d-40f9-a0f3-fc701a9be80e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dependency-reduced-pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dependency-reduced-pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jdbcUtil.iml" beforeDir="false" afterPath="$PROJECT_DIR$/JUS.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/annotation/Column.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/annotation/Column.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/annotation/Id.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/annotation/Id.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/annotation/Pass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/annotation/Pass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/annotation/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/annotation/Table.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/AspectHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/AspectHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/Execute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/Execute.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/ExecuteImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/ExecuteImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/JDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/JDBC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/JDBCProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/JDBCProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/JUS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/JUS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/Page.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/Page.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/jdbc/mysql/PageLimit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jdbc/mysql/PageLimit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/utils/ArrayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/ArrayUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/utils/ClassUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/ClassUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/jus/utils/NumberUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/NumberUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/annotation/Column.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/annotation/Id.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/annotation/Pass.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/annotation/Table.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/AspectHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/Entity.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/Execute.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/ExecuteImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/JDBC.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/JDBCProxy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/JUS.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/Page.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/jdbc/mysql/PageLimit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/utils/ArrayUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/utils/ClassUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/jus/utils/NumberUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/TestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/TestHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/User.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -70,35 +27,7 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="-782">
-                <caret line="9" column="7" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-                <folding>
-                  <element signature="imports" expanded="true" />
-                </folding>
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -252,45 +181,6 @@
               <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
               <item name="JUS" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jdbc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="JUS" type="b2602c69:ProjectViewProjectNode" />
-              <item name="JUS" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -302,7 +192,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1665655844549" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1665655937102" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -420,7 +310,7 @@
       <workItem from="1665631130278" duration="1242000" />
       <workItem from="1665639562548" duration="12184000" />
       <workItem from="1665655607063" duration="52000" />
-      <workItem from="1665655660926" duration="198000" />
+      <workItem from="1665655660926" duration="851000" />
     </task>
     <servers />
   </component>
@@ -430,7 +320,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="151961000" />
+    <option name="totallyTimeSpent" value="152614000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -443,7 +333,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49805447" visible="true" weight="0.2600536" />
       <window_info id="Structure" order="1" sideWeight="0.5019455" side_tool="true" weight="0.2533512" />
@@ -454,7 +343,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28611898" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28611898" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.398017" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -462,7 +351,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32152975" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.21529745" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.21529745" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.2719547" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -737,13 +626,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/utils/ClassUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -782,16 +664,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -802,6 +674,23 @@
             </folding>
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-323">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
         </state>
       </provider>
     </entry>

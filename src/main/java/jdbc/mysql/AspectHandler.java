@@ -10,15 +10,13 @@ public interface AspectHandler {
 
     /**
      * 查询前执行
-     * @param sql 要执行的sql语句
      */
-    default void before(String sql){}
+    default void before(Object[] args){}
 
     /**
      * 查询后执行
-     * @param sql 执行的sql语句
      */
-    default void after(String sql){}
+    default void after(Object[] args){}
 
     /**
      * 执行sql语句报错时执行
