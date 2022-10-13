@@ -1,8 +1,8 @@
-package jdbc.mysql;
+package com.jus.jdbc.mysql;
 
-import jdbc.annotation.Column;
-import utils.ClassUtils;
-import utils.NumberUtils;
+import com.jus.jdbc.annotation.Column;
+import com.jus.utils.ClassUtils;
+import com.jus.utils.NumberUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

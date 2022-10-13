@@ -1,4 +1,4 @@
-package jdbc.mysql;
+package com.jus.jdbc.mysql;
 
 import java.util.HashMap;
 import java.util.List;

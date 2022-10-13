@@ -1,4 +1,4 @@
-package jdbc.mysql;
+package com.jus.jdbc.mysql;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

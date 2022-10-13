@@ -1,4 +1,4 @@
-package utils;
+package com.jus.utils;
 
 import java.lang.reflect.Field;
 

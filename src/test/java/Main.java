@@ -1,5 +1,5 @@
-import jdbc.mysql.JUS;
-import jdbc.mysql.Page;
+import com.jus.jdbc.mysql.JUS;
+import com.jus.jdbc.mysql.Page;
 
 import java.util.List;
 

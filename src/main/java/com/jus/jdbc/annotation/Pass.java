@@ -1,4 +1,4 @@
-package jdbc.annotation;
+package com.jus.jdbc.annotation;
 
 
 import java.lang.annotation.ElementType;

@@ -1,11 +1,11 @@
-package jdbc.mysql;
+package com.jus.jdbc.mysql;
 
-import jdbc.annotation.Column;
-import jdbc.annotation.Id;
-import jdbc.annotation.Pass;
-import jdbc.annotation.Table;
-import utils.ArrayUtils;
-import utils.ClassUtils;
+import com.jus.jdbc.annotation.Column;
+import com.jus.jdbc.annotation.Id;
+import com.jus.jdbc.annotation.Pass;
+import com.jus.jdbc.annotation.Table;
+import com.jus.utils.ArrayUtils;
+import com.jus.utils.ClassUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
