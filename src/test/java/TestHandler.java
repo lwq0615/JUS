@@ -1,6 +1,4 @@
-import jus.jdbc.mysql.AspectHandler;
-
-import java.lang.reflect.InvocationTargetException;
+import jdbc.mysql.AspectHandler;
 
 public class TestHandler implements AspectHandler {
     @Override

@@ -1,7 +1,7 @@
-import jus.jdbc.annotation.Column;
-import jus.jdbc.annotation.Id;
-import jus.jdbc.annotation.Pass;
-import jus.jdbc.annotation.Table;
+import jdbc.annotation.Column;
+import jdbc.annotation.Id;
+import jdbc.annotation.Pass;
+import jdbc.annotation.Table;
 import lombok.Data;
 
 @Table("users")
