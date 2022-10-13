@@ -2,61 +2,71 @@
  
 ### 如何使用
 
-### 1.导入依赖jar包（mysql驱动包和JDBCUtils）
+### 1.导入依赖jar包（mysql驱动包和JUS）
 
 ### 2.编写配置文件（yml格式）
 ```yml
-#数据库配置
-datasource:
-  driver: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
-  username: root
-  password: 123456
-  #最大连接数
-  maxCount: 100
+jdbc:
+  # 数据源
+  datasource:
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+  config:
+    # 最大连接数
+    maxCount: 100
+    # 是否打印到控制台
+    debug: true
+    # 切面类
+    aspectHandler: TestHandler
 ```
 
 ### 3.创建实体类
 ```java
-import lwq.jdbc.annotation.Id;
-import lwq.jdbc.annotation.Table;
+import jus.jdbc.annotation.Column;
+import jus.jdbc.annotation.Id;
+import jus.jdbc.annotation.Pass;
+import jus.jdbc.annotation.Table;
+import lombok.Data;
 
-@Data
-//与该实体映射的表格名称
+
+// 数据库表名
 @Table("users")
+@Data
 public class User {
-    //在使用update方法更新数据时，添加了@Id的属性将被作为查询参数
+
+    // 标记该字段为数据库主键
     @Id
     private Integer id;
-    //可通过@Column注解配置与数据库映射的字段，没有配置则默认使用属性名
+    
+    // 该字段与数据库表的字段名映射
     @Column("user_name")
     private String userName;
-    private int age;  
+    
+    // 该字段不作为增删改查的条件
+    @Pass
+    private String pass;
 }
 ```
 
 ### 4.代码调用
 ```java
-import lwq.jdbc.mysql.JDBCUtil;
+import jus.jdbc.mysql.JUS;
+import jus.jdbc.mysql.Page;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        //以配置文件的路径为构造参数
-        JDBCUtil jdbcUtil = new JDBCUtil("src/config.yml");
-        
-        //通过配置的实体类查询
+        JUS jus = new JUS("src/config.yml");
         User user = new User();
-        user.setId(1);
-        user = jdbcUtil.query(user);
-        System.out.println(user);
-
-        //分页查询
-        jdbcUtil.setPage(2,10);
-        Page page = jdbcUtil.getPage(user);
-        System.out.println(page);
-
+        jus.setPage(1, 10);
+        List<User> users = jus.queryList(user);
+        System.out.println(new Page<>(users));
     }
 }
+
 ```
 
 联系开发者：1072864729@qq.com
