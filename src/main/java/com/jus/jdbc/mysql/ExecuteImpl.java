@@ -6,6 +6,7 @@ import com.jus.utils.NumberUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -244,17 +245,17 @@ public class ExecuteImpl extends JDBC implements Execute {
      * @return 插入成功返回自动递增的id，否则返回null
      */
     @Override
-    public Integer insertReturnId(String sql) throws Exception{
-        Integer res = null;
+    public Long insertReturnId(String sql) throws Exception{
+        Long res = null;
         Connection conn = null;
         Statement statement = null;
         try {
             conn = getConnection();
             statement = conn.createStatement();
             statement.executeUpdate(sql);
-            ResultSet result = statement.executeQuery("select LAST_INSERT_ID() id");
+            ResultSet result = statement.getGeneratedKeys();
             result.next();
-            res = result.getInt("id");
+            res = ((BigInteger) result.getObject(1)).longValue();
         } catch (SQLException e) {
             throw e;
         }finally {
@@ -272,18 +273,18 @@ public class ExecuteImpl extends JDBC implements Execute {
      * 预编译返回自增ID
      */
     @Override
-    public Integer insertReturnId(String sql, List params) throws Exception{
-        Integer res = null;
+    public Long insertReturnId(String sql, List params) throws Exception{
+        Long res = null;
         Connection conn = null;
         PreparedStatement preparedStatement = null;
         try {
             conn = getConnection();
-            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             this.loadPreStaParams(preparedStatement, params);
             preparedStatement.executeUpdate();
-            ResultSet result = preparedStatement.executeQuery("select LAST_INSERT_ID() id");
+            ResultSet result = preparedStatement.getGeneratedKeys();
             result.next();
-            res = result.getInt("id");
+            res = ((BigInteger) result.getObject(1)).longValue();
         } catch (SQLException e) {
             throw e;
         }finally {

@@ -49,11 +49,11 @@ public interface Execute {
      * @param sql 插入语句
      * @return 插入成功返回自动递增的id，否则返回null
      */
-    Integer insertReturnId(String sql) throws Exception;
+    Long insertReturnId(String sql) throws Exception;
 
     /**
      * 预编译版本返回id
      */
-    Integer insertReturnId(String sql, List params) throws Exception;
+    Long insertReturnId(String sql, List params) throws Exception;
 
 }

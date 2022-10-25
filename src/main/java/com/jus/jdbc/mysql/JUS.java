@@ -77,7 +77,7 @@ public class JUS implements Execute {
     }
 
     @Override
-    public Integer insertReturnId(String sql) {
+    public Long insertReturnId(String sql) {
         try {
             return jdbc.insertReturnId(sql);
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class JUS implements Execute {
     }
 
     @Override
-    public Integer insertReturnId(String sql, List params) {
+    public Long insertReturnId(String sql, List params) {
         try {
             return jdbc.insertReturnId(sql, params);
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public class JUS implements Execute {
      * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为新增参数
      * @return 插入成功返回自动递增的id，否则返回null
      */
-    public Integer insertReturnId(Object obj){
+    public Long insertReturnId(Object obj){
         String sql = Entity.insertSql(obj);
         List params = Entity.getParams(obj);
         return this.insertReturnId(sql, params);

@@ -58,7 +58,7 @@ public class JDBC {
             Yaml yaml = new Yaml();
             InputStream in = new FileInputStream(path);
             Map config = yaml.loadAs(in, Map.class);
-            Map jdbc = (Map) config.get("com/jus/jdbc");
+            Map jdbc = (Map) config.get("jdbc");
             this.config = jdbc;
             this.config(jdbc);
         } catch (Exception e) {

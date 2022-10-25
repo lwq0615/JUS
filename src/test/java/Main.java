@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
         JUS jus = new JUS("src/config.yml");
         User user = new User();
+        user.setName("123");
         jus.setPage(1, 2);
-        List<User> users = jus.queryList(user);
-        System.out.println(new Page<>(users));
+        System.out.println(jus.insertReturnId(user));
     }
 }

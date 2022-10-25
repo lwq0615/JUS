@@ -6,11 +6,11 @@
 
 ### 2.编写配置文件（yml格式）
 ```yml
-com.jus.jdbc:
+jdbc:
   # 数据源
   datasource:
-    driver: com.mysql.cj.com.jus.jdbc.Driver
-    url: com.jus.jdbc:mysql://localhost:3306/com.jus.jdbc?serverTimezone=GMT%2B8
+    driver: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jdbc?serverTimezone=GMT%2B8
     username: root
     password: 123456
   config:
@@ -24,10 +24,10 @@ com.jus.jdbc:
 
 ### 3.创建实体类
 ```java
-import jus.com.jus.jdbc.annotation.Column;
-import jus.com.jus.jdbc.annotation.Id;
-import jus.com.jus.jdbc.annotation.Pass;
-import jus.com.jus.jdbc.annotation.Table;
+import com.jus.jdbc.annotation.Column;
+import com.jus.jdbc.annotation.Id;
+import com.jus.jdbc.annotation.Pass;
+import com.jus.jdbc.annotation.Table;
 import lombok.Data;
 
 
@@ -52,8 +52,8 @@ public class User {
 
 ### 4.代码调用
 ```java
-import jus.com.jus.jdbc.mysql.JUS;
-import jus.com.jus.jdbc.mysql.Page;
+import com.jus.jdbc.mysql.JUS;
+import com.jus.jdbc.mysql.Page;
 
 import java.util.List;
 
