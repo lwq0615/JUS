@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * 获取并执行sql
  */
-public class ExecuteImpl extends JDBC implements Execute {
+public class ExecuteImpl extends JDBCConnection implements Execute {
 
 
     public ExecuteImpl(String path) {

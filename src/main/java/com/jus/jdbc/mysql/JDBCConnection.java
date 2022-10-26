@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 用于建立与获取与数据库的连接
  */
-public class JDBC {
+public class JDBCConnection {
 
     private String url;
     private String username;
@@ -53,7 +53,7 @@ public class JDBC {
      * 在构造函数内进行配置文件读取和连接池的初始化
      * @param path 配置文件的路径
      */
-    public JDBC(String path) {
+    public JDBCConnection(String path) {
         try {
             Yaml yaml = new Yaml();
             InputStream in = new FileInputStream(path);
