@@ -54,7 +54,7 @@ public class JDBCProxy implements InvocationHandler {
             res = method.invoke(executeImpl,args);
         }catch (Exception e) {
             if(aspectHandler != null){
-                if(aspectHandler.error((String) args[0], (InvocationTargetException) e)) throw e;
+                if(aspectHandler.error(args, (InvocationTargetException) e)) throw e;
             }else{
                 throw e;
             }
