@@ -60,9 +60,13 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         JUS jus = new JUS("src/config.yml");
+        // 设置查询参数
         User user = new User();
+        user.setName("lwq");
+        // 分页
         jus.setPage(1, 10);
         List<User> users = jus.queryList(user);
+        // 获取分页查询信息
         System.out.println(new Page<>(users));
     }
 }

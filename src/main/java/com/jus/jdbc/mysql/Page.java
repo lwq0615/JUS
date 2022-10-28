@@ -8,9 +8,9 @@ public class Page<E> {
     private Integer current;
     private Integer size;
     private Integer total;
-    private List<E> data = new ArrayList<>();
+    private List<E> data = new ArrayList<E>();
 
-    public Page(List data){
+    public Page(List<E> data){
         this.data = data;
         Page pageInfo = PageLimit.getPageInfo(data);
         if(pageInfo != null){

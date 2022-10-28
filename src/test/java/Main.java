@@ -1,3 +1,4 @@
+import com.jus.jdbc.mysql.JDBCProxy;
 import com.jus.jdbc.mysql.JUS;
 import com.jus.jdbc.mysql.Page;
 
@@ -7,8 +8,9 @@ public class Main {
     public static void main(String[] args) {
         JUS jus = new JUS("src/config.yml");
         User user = new User();
-        user.setName("123");
-        jus.setPage(1, 2);
-        System.out.println(jus.insertReturnId(user));
+        user.setName("lwq");
+        jus.setPage(1, 10);
+        List<User> users = jus.queryList(user);
+        System.out.println(users);
     }
 }
