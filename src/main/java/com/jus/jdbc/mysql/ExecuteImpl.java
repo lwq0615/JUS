@@ -114,7 +114,7 @@ public class ExecuteImpl extends JDBCConnection implements Execute {
         Page page = PageLimit.getPage();
         int total = 0;
         if(page != null){
-            total = this.queryTotal(sql);
+            total = this.queryTotal(sql, null);
             sql += " limit "+(page.getCurrent()-1)*page.getSize()+", "+page.getSize();
         }
         Connection conn = null;
@@ -154,7 +154,7 @@ public class ExecuteImpl extends JDBCConnection implements Execute {
         Page page = PageLimit.getPage();
         int total = 0;
         if(page != null){
-            total = this.queryTotal(sql);
+            total = this.queryTotal(sql, params);
             sql += " limit "+(page.getCurrent()-1)*page.getSize()+", "+page.getSize();
         }
         Connection conn = null;
@@ -304,24 +304,34 @@ public class ExecuteImpl extends JDBCConnection implements Execute {
      * @param sql 查询语句
      * @return total总条数
      */
-    private int queryTotal(String sql){
+    private int queryTotal(String sql, List params){
         int selectStart = sql.toLowerCase().indexOf("select");
         int fromStart = sql.toLowerCase().indexOf("from");
         String totalSql = sql.substring(0,selectStart+6)+" count(*) count "+sql.substring(fromStart);
         int res = 0;
         Connection conn = null;
         Statement statement = null;
+        PreparedStatement preparedStatement = null;
         try {
             conn = getConnection();
-            statement = conn.createStatement();
-            ResultSet result = statement.executeQuery(totalSql);
-            result.next();
-            res = result.getInt("count");
+            if(params == null){
+                statement = conn.createStatement();
+                ResultSet result = statement.executeQuery(totalSql);
+                result.next();
+                res = result.getInt("count");
+            }else{
+                preparedStatement = conn.prepareStatement(totalSql);
+                this.loadPreStaParams(preparedStatement, params);
+                ResultSet result = preparedStatement.executeQuery();
+                result.next();
+                res = result.getInt("count");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
             try {
-                statement.close();
+                if(statement != null) statement.close();
+                if(preparedStatement != null) preparedStatement.close();
             }catch (Exception e){
                 e.printStackTrace();
             }

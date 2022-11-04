@@ -98,7 +98,7 @@ public class JUS implements Execute {
 
 
     /**
-     * 查询数据库中的一条记录4
+     * 查询数据库中的一条记录
      * @param obj 与数据库表格映射的实体类实例，实例的每个非null属性值将会作为查询参数
      * @return 返回查询结果，查询不到返回null
      */

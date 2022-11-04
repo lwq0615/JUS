@@ -181,7 +181,6 @@ public class Entity {
                     Column column = field.getAnnotation(Column.class);
                     String columnName = column == null ? field.getName() : column.value();
                     Id id = field.getAnnotation(Id.class);
-                    String val = value.toString();
                     if (id == null) {
                         values.add(columnName + " = ?");
                     } else {
