@@ -44,6 +44,10 @@ public class User {
     @Column("user_name")
     private String userName;
     
+    // 该字段为非空属性
+    @Required
+    private String phone;
+    
     // 该字段不作为增删改查的条件
     @Pass
     private String pass;

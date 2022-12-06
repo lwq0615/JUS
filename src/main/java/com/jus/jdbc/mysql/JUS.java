@@ -104,7 +104,7 @@ public class JUS implements Execute {
      */
     public <R> R query(R obj){
         String sql = Entity.selectSql(obj);
-        List params = Entity.getParams(obj);
+        List params = Entity.getParams(obj, false);
         Class cls = obj.getClass();
         return (R)this.query(sql, params, cls);
     }
@@ -116,7 +116,7 @@ public class JUS implements Execute {
      */
     public <E> List<E> queryList(E obj){
         String sql = Entity.selectSql(obj);
-        List params = Entity.getParams(obj);
+        List params = Entity.getParams(obj, false);
         Class cls = obj.getClass();
         return this.queryList(sql, params, cls);
     }
@@ -128,7 +128,7 @@ public class JUS implements Execute {
      */
     public Long insertReturnId(Object obj){
         String sql = Entity.insertSql(obj);
-        List params = Entity.getParams(obj);
+        List params = Entity.getParams(obj, true);
         return this.insertReturnId(sql, params);
     }
 
@@ -139,7 +139,7 @@ public class JUS implements Execute {
      */
     public int insert(Object obj){
         String sql = Entity.insertSql(obj);
-        List params = Entity.getParams(obj);
+        List params = Entity.getParams(obj, true);
         return this.execute(sql, params);
     }
 
@@ -162,7 +162,7 @@ public class JUS implements Execute {
      */
     public int delete(Object obj){
         String sql = Entity.deleteSql(obj);
-        List params = Entity.getParams(obj);
+        List params = Entity.getParams(obj, false);
         return this.execute(sql, params);
     }
 

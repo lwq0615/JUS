@@ -1,9 +1,7 @@
 package com.jus.jdbc.mysql;
 
-import com.jus.jdbc.annotation.Column;
-import com.jus.jdbc.annotation.Id;
-import com.jus.jdbc.annotation.Pass;
-import com.jus.jdbc.annotation.Table;
+import com.jus.jdbc.annotation.*;
+import com.jus.jdbc.mysql.exception.NoValueException;
 import com.jus.utils.ArrayUtils;
 import com.jus.utils.ClassUtils;
 
@@ -24,21 +22,27 @@ public class Entity {
 
     /**
      * 获取预编译对象的参数
+     * @param entity 携带参数的实体类对象
+     * @param required 是否判断非空属性
+     * @return
      */
-    public static List<Object> getParams(Object entity) {
+    public static List<Object> getParams(Object entity, boolean required) {
         ArrayList<Object> params = new ArrayList();
         Field[] fields = ClassUtils.getFields(entity.getClass());
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
+            field.setAccessible(true);
             if(field.getAnnotation(Pass.class) != null){
                 continue;
             }
-            field.setAccessible(true);
             Object value = null;
             try {
                 value = field.get(entity);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            }
+            if(required && value == null && field.getAnnotation(Required.class) != null){
+                throw new NoValueException(entity.getClass().getName(), field.getName());
             }
             if (value != null) {
                 params.add(value);
@@ -52,20 +56,23 @@ public class Entity {
      * 更新语句的预编译参数由于set与where的位置关系，需要将@id放在参数列表最后
      */
     public static List<Object> getUpdateParams(Object entity) {
-        ArrayList<Object> params = new ArrayList();
-        ArrayList<Object> wheres = new ArrayList();
+        ArrayList<Object> params = new ArrayList<>();
+        ArrayList<Object> wheres = new ArrayList<>();
         Field[] fields = ClassUtils.getFields(entity.getClass());
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
+            field.setAccessible(true);
             if(field.getAnnotation(Pass.class) != null){
                 continue;
             }
-            field.setAccessible(true);
             Object value = null;
             try {
                 value = field.get(entity);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            }
+            if(value == null && field.getAnnotation(Required.class) != null){
+                throw new NoValueException(entity.getClass().getName(), field.getName());
             }
             if (value != null) {
                 if(field.getAnnotation(Id.class) != null) wheres.add(value);
