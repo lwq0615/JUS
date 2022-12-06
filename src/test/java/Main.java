@@ -1,6 +1,4 @@
-import com.jus.jdbc.mysql.JDBCProxy;
 import com.jus.jdbc.mysql.JUS;
-import com.jus.jdbc.mysql.Page;
 
 import java.util.List;
 
