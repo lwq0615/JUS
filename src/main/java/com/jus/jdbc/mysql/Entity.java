@@ -4,8 +4,11 @@ import com.jus.jdbc.annotation.*;
 import com.jus.jdbc.mysql.exception.NoValueException;
 import com.jus.utils.ArrayUtils;
 import com.jus.utils.ClassUtils;
+import com.jus.utils.StringUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +38,7 @@ public class Entity {
             if(field.getAnnotation(Pass.class) != null){
                 continue;
             }
-            Object value = null;
-            try {
-                value = field.get(entity);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            Object value = Entity.getValueByGetter(entity, field);
             if(required && value == null && field.getAnnotation(Required.class) != null){
                 throw new NoValueException(entity.getClass().getName(), field.getName());
             }
@@ -65,12 +63,7 @@ public class Entity {
             if(field.getAnnotation(Pass.class) != null){
                 continue;
             }
-            Object value = null;
-            try {
-                value = field.get(entity);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            Object value = Entity.getValueByGetter(entity, field);
             if(value == null && field.getAnnotation(Required.class) != null){
                 throw new NoValueException(entity.getClass().getName(), field.getName());
             }
@@ -105,7 +98,7 @@ public class Entity {
                     continue;
                 }
                 field.setAccessible(true);
-                if(field.get(entity) == null){
+                if(Entity.getValueByGetter(entity, field) == null){
                     continue;
                 }
                 Column column = field.getAnnotation(Column.class);
@@ -141,8 +134,7 @@ public class Entity {
                     continue;
                 }
                 field.setAccessible(true);
-                Object value = field.get(entity);
-                if (value == null) {
+                if (Entity.getValueByGetter(entity, field) == null) {
                     continue;
                 } else {
                     Column column = field.getAnnotation(Column.class);
@@ -181,8 +173,7 @@ public class Entity {
                     continue;
                 }
                 field.setAccessible(true);
-                Object value = field.get(entity);
-                if (value == null) {
+                if (Entity.getValueByGetter(entity, field) == null) {
                     continue;
                 } else {
                     Column column = field.getAnnotation(Column.class);
@@ -227,8 +218,7 @@ public class Entity {
                     continue;
                 }
                 field.setAccessible(true);
-                Object value = field.get(entity);
-                if (value == null) {
+                if (Entity.getValueByGetter(entity, field) == null) {
                     continue;
                 }
                 Column column = field.getAnnotation(Column.class);
@@ -244,4 +234,28 @@ public class Entity {
             return sql;
         }
     }
+
+
+    /**
+     * 通过get方法获取值
+     * @param entity 对象实例
+     * @param field 要获取值的属性
+     * @return 通过get方法获取的属性的值
+     */
+    public static Object getValueByGetter(Object entity, Field field){
+        Object value = null;
+        try {
+            Method method = entity.getClass().getMethod("get" + StringUtils.firstUp(field.getName()));
+            value = method.invoke(entity);
+        } catch (NoSuchMethodException e){
+            value = field.get(entity);
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }finally {
+            return value;
+        }
+    }
+
+
 }

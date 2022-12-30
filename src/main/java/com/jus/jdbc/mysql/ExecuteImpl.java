@@ -3,6 +3,7 @@ package com.jus.jdbc.mysql;
 import com.jus.jdbc.annotation.Column;
 import com.jus.utils.ClassUtils;
 import com.jus.utils.NumberUtils;
+import com.jus.utils.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -366,7 +367,8 @@ public class ExecuteImpl extends JDBCConnection implements Execute {
                         value = method.invoke(result, columnName);
                     }catch (Exception e){}
                 }
-                field.set(res,value);
+                Method setMethod = res.getClass().getMethod("set" + StringUtils.firstUp(field.getName()), field.getType());
+                setMethod.invoke(res, value);
             }catch (Exception e){
                 e.printStackTrace();
             }

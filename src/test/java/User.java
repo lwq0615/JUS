@@ -1,7 +1,7 @@
 import com.jus.jdbc.annotation.*;
 import lombok.Data;
 
-@Table("users")
+@Table("user")
 @Data
 public class User {
 
@@ -11,4 +11,5 @@ public class User {
     private String name;
     @Pass
     private String pass;
+
 }
