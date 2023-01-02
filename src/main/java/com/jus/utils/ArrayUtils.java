@@ -23,12 +23,15 @@ public class ArrayUtils {
     }
 
     public static String join(List<String> arr, String c){
-        String res = "";
-        res += arr.get(0);
-        for (int i = 1; i < arr.size(); i++) {
-            res += c+arr.get(i);
+        if(arr == null || arr.size() == 0){
+            return null;
         }
-        return res;
+        StringBuilder stringBuilder = new StringBuilder("");
+        stringBuilder.append(arr.get(0));
+        for (int i = 1; i < arr.size(); i++) {
+            stringBuilder.append(c+arr.get(i));
+        }
+        return stringBuilder.toString();
     }
 
     public static <T> List<T> asArray(T ...arr){
